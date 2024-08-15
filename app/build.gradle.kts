@@ -1,6 +1,9 @@
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -53,4 +56,8 @@ dependencies {
 
     //Firebase Storage:
     implementation(libs.firebase.storage)
+
+    //GoogleMaps
+    implementation(libs.play.services.maps)
+    implementation ("com.google.android.gms:play-services-location:21.3.0")
 }

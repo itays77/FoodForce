@@ -150,6 +150,4 @@ public class SoldierMealDetailFragment extends Fragment {
             }
         });
     }
-
-
 }

@@ -1,4 +1,3 @@
-
 package com.example.foodforceapp;
 
 import android.content.Intent;
