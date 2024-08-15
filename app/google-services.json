@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "415383237149",
+    "firebase_url": "https://foodforceapp-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "foodforceapp",
+    "storage_bucket": "foodforceapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415383237149:android:51eeadf00cde34880c8cf4",
+        "android_client_info": {
+          "package_name": "com.example.foodforceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415383237149-ni43pcam0rqcege1ao6i1n89j1e7qdns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.foodforceapp",
+            "certificate_hash": "6420200de5048e392db74a032205f41ce7bb9c69"
+          }
+        },
+        {
+          "client_id": "415383237149-k9v6rfi20khguobhr4va4c0fg4takqpj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlA-re1gyhL0aN0qB_eFM_pAiDCiMxwiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415383237149-k9v6rfi20khguobhr4va4c0fg4takqpj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
