@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
@@ -22,6 +23,8 @@ import com.example.foodforceapp.Fragments.SoldierMealDetailFragment;
 import com.example.foodforceapp.Models.Meal;
 import com.example.foodforceapp.Models.Soldier;
 import com.example.foodforceapp.Models.User;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,16 +36,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MealRequestAdapter.OnMealClickListener {
 
-
     private TextView userInfoTextView;
     private RecyclerView mealRequestsRecyclerView;
-    private Button addMealRequestButton;
+    private ExtendedFloatingActionButton addMealRequestButton;
     private MealRequestAdapter mealRequestAdapter;
     private List<Meal> allMealRequests = new ArrayList<>();
     private List<Meal> filteredMealRequests = new ArrayList<>();
     private boolean isSoldier = false;
     private String currentUserId;
-    private Spinner filterSpinner;
+    private AutoCompleteTextView filterSpinner;
+    private int selectedFilterPosition = 0;
     private FrameLayout fragmentContainer;
 
     @Override
@@ -50,15 +53,22 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MaterialToolbar topAppBar = findViewById(R.id.topAppBar);
+        setSupportActionBar(topAppBar);
+
+        mealRequestsRecyclerView = findViewById(R.id.mealRequestsRecyclerView);
+        addMealRequestButton = findViewById(R.id.addMealRequestButton);
+        filterSpinner = findViewById(R.id.filterSpinner);
+
+        mealRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mealRequestAdapter = new MealRequestAdapter(filteredMealRequests, this);
+        mealRequestsRecyclerView.setAdapter(mealRequestAdapter);
+
         userInfoTextView = findViewById(R.id.userInfoTextView);
         mealRequestsRecyclerView = findViewById(R.id.mealRequestsRecyclerView);
         addMealRequestButton = findViewById(R.id.addMealRequestButton);
         filterSpinner = findViewById(R.id.filterSpinner);
         fragmentContainer = findViewById(R.id.fragmentContainer);
-
-        mealRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mealRequestAdapter = new MealRequestAdapter(filteredMealRequests, this);
-        mealRequestsRecyclerView.setAdapter(mealRequestAdapter);
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -70,19 +80,13 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
     }
 
     private void setupFilterSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.filter_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] filterOptions = new String[]{"All Requests", "Open Requests"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, filterOptions);
         filterSpinner.setAdapter(adapter);
 
-        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                filterMealRequests(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+        filterSpinner.setOnItemClickListener((parent, view, position, id) -> {
+            selectedFilterPosition = position; // Add this line
+            filterMealRequests(position);
         });
     }
 
@@ -121,10 +125,14 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Meal meal = snapshot.getValue(Meal.class);
                     if (meal != null) {
-                        allMealRequests.add(meal);
+                        if (!isSoldier || meal.getSoldierUserId().equals(currentUserId)) {
+                            allMealRequests.add(meal);
+                        }
                     }
                 }
-                filterMealRequests(filterSpinner.getSelectedItemPosition());
+                filterMealRequests(selectedFilterPosition);
+                mealRequestAdapter.notifyDataSetChanged();
+                updateUIVisibility();
             }
 
             @Override
@@ -134,15 +142,38 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         });
     }
 
+    private void updateUIVisibility() {
+        if (filteredMealRequests.isEmpty()) {
+            mealRequestsRecyclerView.setVisibility(View.GONE);
+            findViewById(R.id.noMealsTextView).setVisibility(View.VISIBLE);
+        } else {
+            mealRequestsRecyclerView.setVisibility(View.VISIBLE);
+            findViewById(R.id.noMealsTextView).setVisibility(View.GONE);
+        }
+    }
+
+
+
+    public void refreshUI() {
+        loadAllMealRequests();
+        updateAddButtonVisibility();
+    }
+
+    private void updateAddButtonVisibility() {
+        if (addMealRequestButton != null) {
+            addMealRequestButton.setVisibility(isSoldier ? View.VISIBLE : View.GONE);
+        }
+    }
+
     private void openAddMealFragment() {
         AddMealFragment addMealFragment = new AddMealFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, addMealFragment)
                 .addToBackStack(null)
                 .commit();
-        addMealRequestButton.setVisibility(View.GONE);
-        mealRequestsRecyclerView.setVisibility(View.GONE);
         fragmentContainer.setVisibility(View.VISIBLE);
+        mealRequestsRecyclerView.setVisibility(View.GONE);
+        addMealRequestButton.setVisibility(View.GONE);
     }
 
 
@@ -172,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
                         case TEMP:
                             userInfo = user.getName() + " - Temporary User";
                             isSoldier = false;
-                            // You might want to redirect to a user type selection screen here
                             break;
                         default:
                             userInfo = "Unknown user type";
@@ -197,30 +227,15 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
 
 
 
-
-
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-            mealRequestsRecyclerView.setVisibility(View.VISIBLE);
-            fragmentContainer.setVisibility(View.GONE);
-            if (isSoldier) {
-                addMealRequestButton.setVisibility(View.VISIBLE);
-            }
-        } else {
-            super.onBackPressed();
-        }
-    }
     private void openSoldierMealDetailFragment(String mealId) {
         SoldierMealDetailFragment detailFragment = SoldierMealDetailFragment.newInstance(mealId);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, detailFragment)
                 .addToBackStack(null)
                 .commit();
-        addMealRequestButton.setVisibility(View.GONE);
-        mealRequestsRecyclerView.setVisibility(View.GONE);
         fragmentContainer.setVisibility(View.VISIBLE);
+        mealRequestsRecyclerView.setVisibility(View.GONE);
+        addMealRequestButton.setVisibility(View.GONE);
     }
 
     private void openMamaMealDetailFragment(String mealId) {
@@ -229,10 +244,31 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
                 .replace(R.id.fragmentContainer, detailFragment)
                 .addToBackStack(null)
                 .commit();
-        mealRequestsRecyclerView.setVisibility(View.GONE);
-        fragmentContainer.setVisibility(View.VISIBLE);
+        hideMainContent();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+            showMainContent();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void showMainContent() {
+        fragmentContainer.setVisibility(View.GONE);
+        mealRequestsRecyclerView.setVisibility(View.VISIBLE);
+        filterSpinner.setVisibility(View.VISIBLE);
+        refreshUI();
+    }
+
+    private void hideMainContent() {
+        fragmentContainer.setVisibility(View.VISIBLE);
+        mealRequestsRecyclerView.setVisibility(View.GONE);
+        filterSpinner.setVisibility(View.GONE);
+    }
     @Override
     public void onMealClick(String mealId) {
         if (isSoldier) {
@@ -242,6 +278,12 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
             Log.d("FragmentOpened", "Opening MamaMealDetailFragment");
             openMamaMealDetailFragment(mealId);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshUI();
     }
 
 

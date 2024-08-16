@@ -130,9 +130,8 @@ public class MamaMealDetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).showAddMealRequestButtonIfSoldier();
-
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).refreshUI();
         }
     }
 }

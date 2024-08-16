@@ -92,6 +92,10 @@ public class AddMealFragment extends Fragment {
                         if (getFragmentManager() != null) {
                             getFragmentManager().popBackStack();
                         }
+                        if (getActivity() instanceof MainActivity) {
+                            ((MainActivity) getActivity()).refreshUI();
+                        }
+                        getFragmentManager().popBackStack();
                     } else {
                         Toast.makeText(getContext(), "Failed to add meal", Toast.LENGTH_SHORT).show();
                     }

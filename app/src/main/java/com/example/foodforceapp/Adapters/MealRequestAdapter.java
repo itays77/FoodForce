@@ -91,16 +91,16 @@ public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.
             int statusColor;
             switch (meal.getStatus().toLowerCase()) {
                 case "open":
-                    statusColor = ContextCompat.getColor(context, R.color.colorStatusOpen);
+                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_inversePrimary);
                     break;
                 case "accepted":
-                    statusColor = ContextCompat.getColor(context, R.color.colorStatusAccepted);
+                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_tertiary);
                     break;
                 case "completed":
-                    statusColor = ContextCompat.getColor(context, R.color.colorStatusCompleted);
+                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_onSurface);
                     break;
                 default:
-                    statusColor = ContextCompat.getColor(context, R.color.colorStatusDefault);
+                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_shadow);
                     break;
             }
             statusIndicator.setBackgroundColor(statusColor);
