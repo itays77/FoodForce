@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.services)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    val material3_version = "1.1.2"
 }
 
 android {
@@ -59,5 +60,6 @@ dependencies {
 
     //GoogleMaps
     implementation(libs.play.services.maps)
-    implementation ("com.google.android.gms:play-services-location:21.3.0")
+    val material3_version = "1.1.2"
+    implementation("androidx.compose.material3:material3:$material3_version")
 }
