@@ -2,12 +2,16 @@ package com.example.foodforceapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.foodforceapp.Models.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,17 +36,21 @@ public class LoginActivity extends AppCompatActivity {
             }
     );
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user == null) {
-            signIn();
+        // Check if user is signed in
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            // User is signed in, navigate to main activity
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         } else {
-            checkUserTypeAndProceed(user.getUid());
+            // No user is signed in, show sign-in options
+            createSignInIntent();
         }
     }
 
@@ -60,14 +68,39 @@ public class LoginActivity extends AppCompatActivity {
         signInLauncher.launch(signInIntent);
     }
 
+    public void createSignInIntent() {
+        // Choose authentication providers
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.GoogleBuilder().build()
+        );
+
+        // Create and launch sign-in intent
+        Intent signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setLogo(R.drawable.foodforcelogo)  // Set your logo here
+                .setIsSmartLockEnabled(false)
+                .build();
+        signInLauncher.launch(signInIntent);
+    }
+
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
+        IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
+            // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                checkUserTypeAndProceed(user.getUid());
-            }
+            // Navigate to main activity
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         } else {
-            // Handle sign-in failure
+            // Sign in failed
+            if (response == null) {
+                // User pressed back button
+                Toast.makeText(this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Sign in failed", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

@@ -2,11 +2,14 @@ package com.example.foodforceapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
 
         addMealRequestButton.setOnClickListener(v -> openAddMealFragment());
     }
+
 
     private void setupFilterSpinner() {
         String[] filterOptions = new String[]{"All Requests", "Open Requests"};
@@ -176,34 +180,36 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(currentUserId);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
-                    String userInfo;
+                    StringBuilder userInfo = new StringBuilder();
                     switch (user.getType()) {
                         case SOLDIER:
                             Soldier soldier = dataSnapshot.getValue(Soldier.class);
                             if (soldier != null) {
-                                userInfo = soldier.getName() + " - " + soldier.getUnit();
+                                userInfo.append(soldier.getName()).append(" - ").append(soldier.getUnit()).append("\n")
+                                        .append(soldier.getSType().toString());
                                 isSoldier = true;
                             } else {
-                                userInfo = "Error loading soldier data";
+                                userInfo.append("Error loading soldier data");
                                 isSoldier = false;
                             }
                             break;
                         case MAMA:
-                            userInfo = user.getName() + " - Mama";
+                            userInfo.append(user.getName()).append(" - Mama");
                             isSoldier = false;
                             break;
                         case TEMP:
-                            userInfo = user.getName() + " - Temporary User";
+                            userInfo.append(user.getName()).append(" - Temporary User");
                             isSoldier = false;
                             break;
                         default:
-                            userInfo = "Unknown user type";
+                            userInfo.append("Unknown user type");
                             isSoldier = false;
                     }
-                    userInfoTextView.setText(userInfo);
+                    userInfoTextView.setText(userInfo.toString());
+                    userInfoTextView.setGravity(Gravity.START);
                     addMealRequestButton.setVisibility(isSoldier ? View.VISIBLE : View.GONE);
                 } else {
                     userInfoTextView.setText("User data not found");
@@ -212,11 +218,12 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 userInfoTextView.setText("Error loading user data");
                 addMealRequestButton.setVisibility(View.GONE);
             }
         });
+
     }
 
 
