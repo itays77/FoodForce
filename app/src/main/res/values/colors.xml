@@ -30,4 +30,5 @@
     <color name="md_theme_light_surfaceTint">#6750A4</color>
     <color name="md_theme_light_outlineVariant">#CAC4D0</color>
     <color name="md_theme_light_scrim">#000000</color>
+    <color name="fragment_background">#FFFFFF</color>
 </resources>

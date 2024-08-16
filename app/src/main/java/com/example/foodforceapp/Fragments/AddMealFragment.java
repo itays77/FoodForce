@@ -1,5 +1,6 @@
 package com.example.foodforceapp.Fragments;
 
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,26 +10,26 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
 
-import com.example.foodforceapp.MainActivity;
 import com.example.foodforceapp.Models.Meal;
 import com.example.foodforceapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-import java.util.Calendar;
 
 public class AddMealFragment extends Fragment {
 
     private EditText descriptionEditText, locationEditText, numberOfPeopleEditText;
     private DatePicker datePicker;
     private CheckBox kosherCheckBox;
-    private Button submitButton, backButton;
+    private Button submitButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_meal, container, false);
+        view.setBackgroundResource(android.R.color.white);
 
         descriptionEditText = view.findViewById(R.id.descriptionEditText);
         locationEditText = view.findViewById(R.id.locationEditText);
@@ -36,10 +37,8 @@ public class AddMealFragment extends Fragment {
         datePicker = view.findViewById(R.id.datePicker);
         kosherCheckBox = view.findViewById(R.id.kosherCheckBox);
         submitButton = view.findViewById(R.id.submitButton);
-        backButton = view.findViewById(R.id.backButton);
 
         submitButton.setOnClickListener(v -> submitMealRequest());
-        backButton.setOnClickListener(v -> goBack());
 
         return view;
     }
@@ -80,10 +79,13 @@ public class AddMealFragment extends Fragment {
         }
 
         Meal meal = new Meal(mealId, currentUser.getUid(), date, description, kosher, location, numberOfPeople);
+        saveMealToDatabase(meal);
+    }
 
+    private void saveMealToDatabase(Meal meal) {
         FirebaseDatabase.getInstance().getReference()
                 .child("meals")
-                .child(mealId)
+                .child(meal.getId())
                 .setValue(meal)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -92,20 +94,10 @@ public class AddMealFragment extends Fragment {
                         if (getFragmentManager() != null) {
                             getFragmentManager().popBackStack();
                         }
-                        if (getActivity() instanceof MainActivity) {
-                            ((MainActivity) getActivity()).refreshUI();
-                        }
-                        getFragmentManager().popBackStack();
                     } else {
                         Toast.makeText(getContext(), "Failed to add meal", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void goBack() {
-        if (getFragmentManager() != null) {
-            getFragmentManager().popBackStack();
-        }
     }
 
     private void clearFields() {
@@ -113,16 +105,5 @@ public class AddMealFragment extends Fragment {
         locationEditText.setText("");
         numberOfPeopleEditText.setText("");
         kosherCheckBox.setChecked(false);
-        Calendar calendar = Calendar.getInstance();
-        datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // When the fragment is destroyed, check if we should show the add meal request button again
-        if (getActivity() != null && getActivity() instanceof MainActivity) {
-            ((MainActivity) getActivity()).showAddMealRequestButtonIfSoldier();
-        }
     }
 }

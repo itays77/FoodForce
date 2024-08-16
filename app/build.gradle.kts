@@ -62,4 +62,6 @@ dependencies {
     implementation(libs.play.services.maps)
     val material3_version = "1.1.2"
     implementation("androidx.compose.material3:material3:$material3_version")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+
 }

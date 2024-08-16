@@ -14,51 +14,100 @@
             android:id="@+id/descriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Meal Description"
-            android:textSize="16sp"
-            android:minLines="3" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/locationTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Location"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/numberOfPeopleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Number of People"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/dateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Date"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/numberOfPeopleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/kosherTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kosher"
-            android:layout_marginTop="8dp" />
+            android:text="Soldier's Photo"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <ImageView
+            android:id="@+id/soldierPhotoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/deleteSoldierPhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Soldier Photo"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mama's Photo"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/mamaPhotoImageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"/>
+
+            <Button
+                android:id="@+id/deleteMamaPhotoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_gravity="bottom|end"/>
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/uploadPhotoButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Photo"
+            android:layout_marginTop="16dp"/>
 
         <Button
             android:id="@+id/approveButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Approve Request"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="16dp"/>
 
     </LinearLayout>
 </ScrollView>

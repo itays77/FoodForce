@@ -3,22 +3,17 @@ package com.example.foodforceapp;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodforceapp.Adapters.MealRequestAdapter;
 import com.example.foodforceapp.Fragments.AddMealFragment;
 import com.example.foodforceapp.Fragments.MamaMealDetailFragment;
-import com.example.foodforceapp.Fragments.MealDetailFragment;
 import com.example.foodforceapp.Fragments.SoldierMealDetailFragment;
 import com.example.foodforceapp.Models.Meal;
 import com.example.foodforceapp.Models.Soldier;
@@ -233,10 +228,9 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
                 .replace(R.id.fragmentContainer, detailFragment)
                 .addToBackStack(null)
                 .commit();
-        fragmentContainer.setVisibility(View.VISIBLE);
-        mealRequestsRecyclerView.setVisibility(View.GONE);
-        addMealRequestButton.setVisibility(View.GONE);
+        showFragmentContainer();
     }
+
 
     private void openMamaMealDetailFragment(String mealId) {
         MamaMealDetailFragment detailFragment = MamaMealDetailFragment.newInstance(mealId);
@@ -244,17 +238,37 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
                 .replace(R.id.fragmentContainer, detailFragment)
                 .addToBackStack(null)
                 .commit();
-        hideMainContent();
+        showFragmentContainer();
+    }
+
+    private void showFragmentContainer() {
+        fragmentContainer.setVisibility(View.VISIBLE);
+        mealRequestsRecyclerView.setVisibility(View.GONE);
+        filterSpinner.setVisibility(View.GONE);
+        addMealRequestButton.setVisibility(View.GONE);
+        userInfoTextView.setVisibility(View.GONE);
     }
 
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-            showMainContent();
+            hideFragmentContainer();
         } else {
             super.onBackPressed();
         }
+    }
+
+
+    private void hideFragmentContainer() {
+        fragmentContainer.setVisibility(View.GONE);
+        mealRequestsRecyclerView.setVisibility(View.VISIBLE);
+        filterSpinner.setVisibility(View.VISIBLE);
+        userInfoTextView.setVisibility(View.VISIBLE);
+        if (isSoldier) {
+            addMealRequestButton.setVisibility(View.VISIBLE);
+        }
+        refreshUI();
     }
 
     private void showMainContent() {

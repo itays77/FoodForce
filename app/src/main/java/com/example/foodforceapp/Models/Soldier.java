@@ -14,6 +14,7 @@ public class Soldier extends User {
         this.sType = sType;
     }
 
+    // Getters and setters
     public String getUnit() { return unit; }
     public void setUnit(String unit) { this.unit = unit; }
 

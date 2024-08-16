@@ -11,6 +11,9 @@ public class Meal {
     private int numberOfPeople;
     private String status;
 
+    private String soldierPhotoUrl;
+    private String mamaPhotoUrl;
+
     // Default constructor required for calls to DataSnapshot.getValue(Meal.class)
     public Meal() {}
 
@@ -36,6 +39,13 @@ public class Meal {
     public String getLocation() { return location; }
     public int getNumberOfPeople() { return numberOfPeople; }
     public String getStatus() { return status; }
+
+
+    public String getSoldierPhotoUrl() { return soldierPhotoUrl; }
+    public void setSoldierPhotoUrl(String url) { this.soldierPhotoUrl = url; }
+
+    public String getMamaPhotoUrl() { return mamaPhotoUrl; }
+    public void setMamaPhotoUrl(String url) { this.mamaPhotoUrl = url; }
 
     // Setters
     public void setId(String id) { this.id = id; }

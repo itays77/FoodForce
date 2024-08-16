@@ -1,21 +1,24 @@
 package com.example.foodforceapp.Fragments;
 
+import static android.app.Activity.RESULT_OK;
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+import static java.security.AccessController.getContext;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import com.bumptech.glide.Glide;
 
-import com.example.foodforceapp.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.example.foodforceapp.Models.Meal;
 import com.example.foodforceapp.R;
 import com.google.firebase.database.DataSnapshot;
@@ -23,19 +26,24 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.Calendar;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class SoldierMealDetailFragment extends Fragment {
     private static final String ARG_MEAL_ID = "meal_id";
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     private String mealId;
     private Meal meal;
-    private EditText descriptionEditText, locationEditText, numberOfPeopleEditText;
-    private DatePicker datePicker;
-    private CheckBox kosherCheckBox;
-    private Button editButton, backButton;
+    private TextView descriptionTextView, locationTextView, dateTextView, numberOfPeopleTextView, kosherTextView, statusTextView;
+    private ImageView mealImageView;
+    private Button uploadPhotoButton;
+    private Button deleteSoldierPhotoButton;
+    private Uri imageUri;
 
     public static SoldierMealDetailFragment newInstance(String mealId) {
         SoldierMealDetailFragment fragment = new SoldierMealDetailFragment();
@@ -56,30 +64,25 @@ public class SoldierMealDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_soldier_meal_detail, container, false);
-        initializeViews(view);
+
+        descriptionTextView = view.findViewById(R.id.descriptionTextView);
+        locationTextView = view.findViewById(R.id.locationTextView);
+        dateTextView = view.findViewById(R.id.dateTextView);
+        numberOfPeopleTextView = view.findViewById(R.id.numberOfPeopleTextView);
+        kosherTextView = view.findViewById(R.id.kosherTextView);
+        statusTextView = view.findViewById(R.id.statusTextView);
+        mealImageView = view.findViewById(R.id.mealImageView);
+        uploadPhotoButton = view.findViewById(R.id.uploadPhotoButton);
+        deleteSoldierPhotoButton = view.findViewById(R.id.deleteSoldierPhotoButton);
+
+        uploadPhotoButton.setOnClickListener(v -> openFileChooser());
+        deleteSoldierPhotoButton.setOnClickListener(v -> deleteSoldierPhoto());
+
         loadMealDetails();
+
         return view;
     }
 
-    private void initializeViews(View view) {
-        descriptionEditText = view.findViewById(R.id.descriptionEditText);
-        locationEditText = view.findViewById(R.id.locationEditText);
-        numberOfPeopleEditText = view.findViewById(R.id.numberOfPeopleEditText);
-        datePicker = view.findViewById(R.id.datePicker);
-        kosherCheckBox = view.findViewById(R.id.kosherCheckBox);
-        editButton = view.findViewById(R.id.editButton);
-        backButton = view.findViewById(R.id.backButton);
-
-        editButton.setOnClickListener(v -> editMeal());
-        backButton.setOnClickListener(v -> {
-            if (getFragmentManager() != null) {
-                getFragmentManager().popBackStack();
-            }
-        });
-
-        // Initially disable editing
-        setEditingEnabled(false);
-    }
 
     private void loadMealDetails() {
         DatabaseReference mealRef = FirebaseDatabase.getInstance().getReference("meals").child(mealId);
@@ -100,53 +103,87 @@ public class SoldierMealDetailFragment extends Fragment {
     }
 
     private void populateViews() {
-        descriptionEditText.setText(meal.getDescription());
-        locationEditText.setText(meal.getLocation());
-        numberOfPeopleEditText.setText(String.valueOf(meal.getNumberOfPeople()));
+        descriptionTextView.setText(meal.getDescription());
+        locationTextView.setText(meal.getLocation());
+        dateTextView.setText(new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date(meal.getDate())));
+        numberOfPeopleTextView.setText(String.valueOf(meal.getNumberOfPeople()));
+        kosherTextView.setText(meal.isKosher() ? "Kosher" : "Not Kosher");
+        statusTextView.setText(meal.getStatus());
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(meal.getDate());
-        datePicker.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-
-        kosherCheckBox.setChecked(meal.isKosher());
-    }
-
-    private void editMeal() {
-        if (editButton.getText().equals("Edit")) {
-            setEditingEnabled(true);
-            editButton.setText("Save");
+        if (meal.getSoldierPhotoUrl() != null && !meal.getSoldierPhotoUrl().isEmpty()) {
+            mealImageView.setVisibility(View.VISIBLE);
+            deleteSoldierPhotoButton.setVisibility(View.VISIBLE);
+            Glide.with(this).load(meal.getSoldierPhotoUrl()).into(mealImageView);
         } else {
-            saveMealChanges();
+            mealImageView.setVisibility(View.GONE);
+            deleteSoldierPhotoButton.setVisibility(View.GONE);
         }
     }
 
-    private void setEditingEnabled(boolean enabled) {
-        descriptionEditText.setEnabled(enabled);
-        locationEditText.setEnabled(enabled);
-        numberOfPeopleEditText.setEnabled(enabled);
-        datePicker.setEnabled(enabled);
-        kosherCheckBox.setEnabled(enabled);
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
-    private void saveMealChanges() {
-        meal.setDescription(descriptionEditText.getText().toString());
-        meal.setLocation(locationEditText.getText().toString());
-        meal.setNumberOfPeople(Integer.parseInt(numberOfPeopleEditText.getText().toString()));
+    private void deleteSoldierPhoto() {
+        if (meal != null && meal.getSoldierPhotoUrl() != null) {
+            // Delete from Firebase Storage
+            StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(meal.getSoldierPhotoUrl());
+            photoRef.delete().addOnSuccessListener(aVoid -> {
+                // Update Firebase Realtime Database
+                meal.setSoldierPhotoUrl(null);
+                FirebaseDatabase.getInstance().getReference("meals").child(meal.getId())
+                        .child("soldierPhotoUrl").removeValue()
+                        .addOnSuccessListener(aVoid1 -> {
+                            Toast.makeText(getContext(), "Photo deleted successfully", Toast.LENGTH_SHORT).show();
+                            mealImageView.setImageResource(android.R.color.transparent);
+                            deleteSoldierPhotoButton.setVisibility(View.GONE);
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update meal data", Toast.LENGTH_SHORT).show());
+            }).addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to delete photo", Toast.LENGTH_SHORT).show());
+        }
+    }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
-        meal.setDate(calendar.getTimeInMillis());
 
-        meal.setKosher(kosherCheckBox.isChecked());
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            uploadImage();
+        }
+    }
+
+    private void uploadImage() {
+        if (imageUri != null) {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference("meals/" + mealId + "/soldier_photo");
+            storageRef.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String photoUrl = uri.toString();
+                            updateMealWithPhoto(photoUrl);
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
+    private void updateMealWithPhoto(String photoUrl) {
+        meal.setSoldierPhotoUrl(photoUrl);
         DatabaseReference mealRef = FirebaseDatabase.getInstance().getReference("meals").child(mealId);
         mealRef.setValue(meal).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(getContext(), "Meal updated successfully", Toast.LENGTH_SHORT).show();
-                setEditingEnabled(false);
-                editButton.setText("Edit");
+                Toast.makeText(getContext(), "Photo updated successfully", Toast.LENGTH_SHORT).show();
+                mealImageView.setVisibility(View.VISIBLE);
+                Glide.with(this).load(photoUrl).into(mealImageView);
             } else {
-                Toast.makeText(getContext(), "Failed to update meal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed to update photo", Toast.LENGTH_SHORT).show();
             }
         });
     }

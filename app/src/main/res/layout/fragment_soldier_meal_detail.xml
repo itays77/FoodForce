@@ -10,56 +10,75 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <EditText
-            android:id="@+id/descriptionEditText"
+        <TextView
+            android:id="@+id/descriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Meal Description"
-            android:inputType="textMultiLine"
-            android:minLines="3" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/locationEditText"
+        <TextView
+            android:id="@+id/locationTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Location"
             android:layout_marginTop="8dp" />
 
-        <EditText
-            android:id="@+id/numberOfPeopleEditText"
+        <TextView
+            android:id="@+id/dateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Number of People"
-            android:inputType="number"
             android:layout_marginTop="8dp" />
 
-        <DatePicker
-            android:id="@+id/datePicker"
+        <TextView
+            android:id="@+id/numberOfPeopleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"
             android:layout_marginTop="8dp" />
 
-        <CheckBox
-            android:id="@+id/kosherCheckBox"
+        <TextView
+            android:id="@+id/kosherTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kosher"
-            android:layout_marginTop="8dp" />
+            android:text="Soldier's Photo"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/mealImageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"/>
+
+            <Button
+                android:id="@+id/deleteSoldierPhotoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_gravity="bottom|end"/>
+
+        </FrameLayout>
 
         <Button
-            android:id="@+id/editButton"
+            android:id="@+id/uploadPhotoButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit"
-            android:layout_marginTop="16dp" />
+            android:text="Upload Photo"
+            android:layout_marginTop="16dp"/>
 
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_marginTop="8dp" />
     </LinearLayout>
 </ScrollView>
