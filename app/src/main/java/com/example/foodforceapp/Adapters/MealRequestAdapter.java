@@ -12,14 +12,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import com.example.foodforceapp.Models.Meal;
+
 import com.example.foodforceapp.R;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.MealViewHolder> {
@@ -58,18 +57,24 @@ public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.
     }
 
     class MealViewHolder extends RecyclerView.ViewHolder {
-        TextView descriptionTextView, locationTextView, dateTextView, numberOfPeopleTextView, kosherTextView, statusTextView;
+        TextView mealTitleTextView, locationTextView, dateTextView, numberOfPeopleTextView, kosherTextView, statusTextView;
         View statusIndicator;
+        ImageView locationIcon, calendarIcon, peopleIcon, kosherIcon;
 
         MealViewHolder(View itemView) {
             super(itemView);
-            descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+            mealTitleTextView = itemView.findViewById(R.id.mealTitleTextView);
             locationTextView = itemView.findViewById(R.id.locationTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             numberOfPeopleTextView = itemView.findViewById(R.id.numberOfPeopleTextView);
             kosherTextView = itemView.findViewById(R.id.kosherTextView);
             statusTextView = itemView.findViewById(R.id.statusTextView);
             statusIndicator = itemView.findViewById(R.id.statusIndicator);
+
+            locationIcon = itemView.findViewById(R.id.locationIcon);
+            calendarIcon = itemView.findViewById(R.id.calendarIcon);
+            peopleIcon = itemView.findViewById(R.id.peopleIcon);
+            kosherIcon = itemView.findViewById(R.id.kosherIcon);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -80,7 +85,7 @@ public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.
         }
 
         public void bind(final Meal meal) {
-            descriptionTextView.setText(meal.getDescription());
+            mealTitleTextView.setText(meal.getDescription());
             locationTextView.setText(meal.getLocation());
             dateTextView.setText(dateFormat.format(new Date(meal.getDate())));
             numberOfPeopleTextView.setText(String.valueOf(meal.getNumberOfPeople()));
@@ -104,6 +109,12 @@ public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.
                     break;
             }
             statusIndicator.setBackgroundColor(statusColor);
+
+            // Set icons (make sure you have these drawables in your res/drawable folder)
+            locationIcon.setImageResource(R.drawable.location);
+            calendarIcon.setImageResource(R.drawable.calendar);
+            peopleIcon.setImageResource(R.drawable.people);
+            kosherIcon.setImageResource(R.drawable.kosher);
         }
     }
 }
