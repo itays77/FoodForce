@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/backsol"
+    android:background="#FEFAE0"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="FoodForceApp"
+            android:background="#A6B37D"
             app:titleTextAppearance="@style/ToolbarTitle"
             style="@style/Widget.Material3.Toolbar.Surface" />
 
@@ -24,23 +25,27 @@
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textColor="@android:color/black"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/mainContent"
             android:layout_width="match_parent"
+            android:textColor="@android:color/black"
             android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:textColor="@android:color/black"
                 android:padding="16dp">
 
                 <TextView
                     android:id="@+id/userInfoTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="16dp" />
@@ -72,7 +77,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/mealRequestsRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingBottom="80dp"
+                    android:layout_marginTop="16dp"/>
 
             </LinearLayout>
 

@@ -15,42 +15,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
+            android:textColor="#1E201E"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/locationTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#1E201E"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/dateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#1E201E"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/numberOfPeopleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#1E201E"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/kosherTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#1E201E"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/statusTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#1E201E"
             android:layout_marginTop="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Soldier's Photo"
+            android:textColor="#1E201E"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
@@ -67,6 +74,7 @@
             <Button
                 android:id="@+id/deleteSoldierPhotoButton"
                 android:layout_width="wrap_content"
+                android:background="#C0C78C"
                 android:layout_height="wrap_content"
                 android:text="Delete"
                 android:layout_gravity="bottom|end"/>
@@ -78,7 +86,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Upload Photo"
+            android:backgroundTint="#6B8A7A"
+            android:textColor="#1E201E"
+
             android:layout_marginTop="16dp"/>
+
 
     </LinearLayout>
 </ScrollView>

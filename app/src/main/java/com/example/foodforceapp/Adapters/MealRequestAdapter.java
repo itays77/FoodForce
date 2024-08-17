@@ -1,6 +1,8 @@
 package com.example.foodforceapp.Adapters;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodforceapp.Models.Meal;
@@ -58,18 +60,18 @@ public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.
 
     class MealViewHolder extends RecyclerView.ViewHolder {
         TextView mealTitleTextView, locationTextView, dateTextView, numberOfPeopleTextView, kosherTextView, statusTextView;
-        View statusIndicator;
         ImageView locationIcon, calendarIcon, peopleIcon, kosherIcon;
+        CardView cardView;
 
         MealViewHolder(View itemView) {
             super(itemView);
+            cardView = (CardView) itemView;
             mealTitleTextView = itemView.findViewById(R.id.mealTitleTextView);
             locationTextView = itemView.findViewById(R.id.locationTextView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             numberOfPeopleTextView = itemView.findViewById(R.id.numberOfPeopleTextView);
             kosherTextView = itemView.findViewById(R.id.kosherTextView);
             statusTextView = itemView.findViewById(R.id.statusTextView);
-            statusIndicator = itemView.findViewById(R.id.statusIndicator);
 
             locationIcon = itemView.findViewById(R.id.locationIcon);
             calendarIcon = itemView.findViewById(R.id.calendarIcon);
@@ -96,21 +98,27 @@ public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.
             int statusColor;
             switch (meal.getStatus().toLowerCase()) {
                 case "open":
-                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_inversePrimary);
+                    statusColor = ContextCompat.getColor(context, R.color.status_open);
                     break;
                 case "accepted":
-                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_tertiary);
+                    statusColor = ContextCompat.getColor(context, R.color.status_accepted);
                     break;
                 case "completed":
-                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_onSurface);
+                    statusColor = ContextCompat.getColor(context, R.color.status_completed);
                     break;
                 default:
-                    statusColor = ContextCompat.getColor(context, R.color.md_theme_light_shadow);
+                    statusColor = ContextCompat.getColor(context, R.color.status_default);
                     break;
             }
-            statusIndicator.setBackgroundColor(statusColor);
 
-            // Set icons (make sure you have these drawables in your res/drawable folder)
+            // Apply a light tint to the CardView background
+            int tintedColor = ColorUtils.setAlphaComponent(statusColor, 25); // 10% opacity
+            cardView.setCardBackgroundColor(tintedColor);
+
+            // Set the status text color to match the status
+            statusTextView.setTextColor(statusColor);
+
+            // Set icons
             locationIcon.setImageResource(R.drawable.location);
             calendarIcon.setImageResource(R.drawable.calendar);
             peopleIcon.setImageResource(R.drawable.people);

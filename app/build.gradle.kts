@@ -63,5 +63,7 @@ dependencies {
     val material3_version = "1.1.2"
     implementation("androidx.compose.material3:material3:$material3_version")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
+    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation ("androidx.core:core:1.3.0")
 
 }
