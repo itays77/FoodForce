@@ -86,6 +86,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:text="Add Meal Request"
-        app:icon="@android:drawable/ic_input_add" />
-
+        app:icon="@android:drawable/ic_input_add"
+        android:backgroundTint="@color/greenarmyLIGHT" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

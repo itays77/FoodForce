@@ -31,4 +31,7 @@
     <color name="md_theme_light_outlineVariant">#CAC4D0</color>
     <color name="md_theme_light_scrim">#000000</color>
     <color name="fragment_background">#FFFFFF</color>
+    <color name="greenarmy">#004D40</color>
+    <color name="greenarmyLIGHT">#98EE99</color>
+
 </resources>
