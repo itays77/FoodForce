@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="#FEFAE0"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -77,6 +78,7 @@
                 android:background="#C0C78C"
                 android:layout_height="wrap_content"
                 android:text="Delete"
+                android:backgroundTint="#982B1C"
                 android:layout_gravity="bottom|end"/>
 
         </FrameLayout>
