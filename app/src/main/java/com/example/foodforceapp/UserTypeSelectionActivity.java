@@ -40,12 +40,10 @@ public class UserTypeSelectionActivity extends AppCompatActivity {
     }
 
     private void selectUserType(User.UserType type) {
-        // Update user type in Firebase
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
         userRef.child("type").setValue(type)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Navigate to ProfileSetupActivity
                         Intent intent = new Intent(this, ProfileSetupActivity.class);
                         intent.putExtra("USER_TYPE", type);
                         intent.putExtra("USER_ID", userId);

@@ -87,6 +87,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
             mama.setName(name);
             mama.setEmail(email);
             mama.setLocation(location);
+            mama.setType(User.UserType.MAMA);
 
             int selectedSpecialtyId = specialtiesRadioGroup.getCheckedRadioButtonId();
             if (selectedSpecialtyId == -1) {
@@ -109,6 +110,7 @@ public class ProfileSetupActivity extends AppCompatActivity {
             soldier.setId(userId);
             soldier.setName(name);
             soldier.setEmail(email);
+            soldier.setType(User.UserType.SOLDIER);
 
             int selectedUnitId = unitRadioGroup.getCheckedRadioButtonId();
             if (selectedUnitId == -1) {
@@ -131,7 +133,6 @@ public class ProfileSetupActivity extends AppCompatActivity {
             } else if (selectedUnitId == R.id.radioOtherUnit) {
                 unit = "Other";
             }
-
             soldier.setUnit(unit);
 
             int selectedTypeId = soldierTypeRadioGroup.getCheckedRadioButtonId();
@@ -150,10 +151,13 @@ public class ProfileSetupActivity extends AppCompatActivity {
     private void handleSaveResult(Task<Void> task) {
         if (task.isSuccessful()) {
             Toast.makeText(this, "Profile saved successfully", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, MainActivity.class));
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
             finish();
         } else {
             Toast.makeText(this, "Failed to save profile", Toast.LENGTH_SHORT).show();
         }
+
     }
 }

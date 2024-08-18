@@ -2,6 +2,7 @@ package com.example.foodforceapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -90,16 +91,22 @@ public class LoginActivity extends AppCompatActivity {
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // Navigate to main activity
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            if (user != null) {
+                Log.d("LoginActivity", "Sign-in successful for user: " + user.getUid());
+                checkUserTypeAndProceed(user.getUid());
+            } else {
+                Log.e("LoginActivity", "Error: User is null after successful sign-in");
+                Toast.makeText(this, "Sign-in error: User is null", Toast.LENGTH_SHORT).show();
+            }
         } else {
             // Sign in failed
+            Log.e("LoginActivity", "Sign-in failed");
             if (response == null) {
-                // User pressed back button
+                Log.d("LoginActivity", "Sign-in cancelled by user");
                 Toast.makeText(this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Sign in failed", Toast.LENGTH_SHORT).show();
+                Log.e("LoginActivity", "Sign-in error: " + response.getError());
+                Toast.makeText(this, "Sign in failed: " + response.getError(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -112,19 +119,23 @@ public class LoginActivity extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     User.UserType userType = dataSnapshot.child("type").getValue(User.UserType.class);
                     if (userType != null && userType != User.UserType.TEMP) {
+                        Log.d("LoginActivity", "Existing user with type: " + userType + ". Navigating to MainActivity.");
                         transactToMainActivity();
                     } else {
+                        Log.d("LoginActivity", "Existing user with TEMP type. Navigating to UserTypeSelectionActivity.");
                         transactToUserTypeSelectionActivity();
                     }
                 } else {
                     // New user, create a new User object with TEMP type
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    User newUser = new User(userId, null, firebaseUser.getEmail(), User.UserType.TEMP);
+                    User newUser = new User(userId, firebaseUser.getDisplayName(), firebaseUser.getEmail(), User.UserType.TEMP);
                     userRef.setValue(newUser).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            Log.d("LoginActivity", "New user created with TEMP type. Navigating to UserTypeSelectionActivity.");
                             transactToUserTypeSelectionActivity();
                         } else {
-                            // Handle the error
+                            Log.e("LoginActivity", "Failed to create new user", task.getException());
+                            Toast.makeText(LoginActivity.this, "Failed to create user profile", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -132,10 +143,13 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle possible errors
+                Log.e("LoginActivity", "Database error: " + databaseError.getMessage());
+                Toast.makeText(LoginActivity.this, "Database error. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 
     private void transactToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);

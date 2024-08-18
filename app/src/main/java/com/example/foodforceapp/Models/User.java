@@ -7,10 +7,9 @@ public class User {
     private String email;
     private UserType type;
 
-    // Default constructor
+    // Default constructor for Firebase
     public User() {}
 
-    // Constructor
     public User(String id, String name, String email, UserType type) {
         this.id = id;
         this.name = name;

@@ -80,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:paddingBottom="80dp"
+                    android:visibility="visible"
                     android:layout_marginTop="16dp"/>
 
             </LinearLayout>
