@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.foodforceapp.MainActivity;
 import com.example.foodforceapp.Models.Meal;
 import com.example.foodforceapp.R;
 import com.google.firebase.database.DataSnapshot;
@@ -77,6 +78,9 @@ public class SoldierMealDetailFragment extends Fragment {
 
         uploadPhotoButton.setOnClickListener(v -> openFileChooser());
         deleteSoldierPhotoButton.setOnClickListener(v -> deleteSoldierPhoto());
+
+        Button backButton = view.findViewById(R.id.backButton);
+        backButton.setOnClickListener(v -> goBack());
 
         loadMealDetails();
 
@@ -186,5 +190,9 @@ public class SoldierMealDetailFragment extends Fragment {
                 Toast.makeText(getContext(), "Failed to update photo", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void goBack() {
+        requireActivity().getOnBackPressedDispatcher().onBackPressed();
     }
 }

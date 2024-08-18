@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -91,6 +92,22 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         loadAllMealRequests();
 
         addMealRequestButton.setOnClickListener(v -> openAddMealFragment());
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    getSupportFragmentManager().popBackStack();
+                    showMainContent();
+                } else {
+                    setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        });
+
+        loadUserInfo();
+        loadAllMealRequests();
     }
 
 
@@ -152,10 +169,11 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle possible errors.
+                Log.e("MainActivity", "Error loading meals: " + databaseError.getMessage());
             }
         });
     }
+
 
     private void updateUIVisibility() {
         if (filteredMealRequests.isEmpty()) {
@@ -167,12 +185,6 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         }
     }
 
-
-
-    public void refreshUI() {
-        loadAllMealRequests();
-        updateAddButtonVisibility();
-    }
 
     private void updateAddButtonVisibility() {
         if (addMealRequestButton != null) {
@@ -295,6 +307,8 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         addMealRequestButton.setVisibility(isSoldier ? View.VISIBLE : View.GONE);
     }
 
+
+
     private void handleIncompleteUserSetup() {
         Log.d("MainActivity", "User setup incomplete. Redirecting to UserTypeSelectionActivity.");
         Intent intent = new Intent(MainActivity.this, UserTypeSelectionActivity.class);
@@ -336,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
-            hideFragmentContainer();
+            showMainContent();
         } else {
             super.onBackPressed();
         }
@@ -354,12 +368,7 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         refreshUI();
     }
 
-    private void showMainContent() {
-        fragmentContainer.setVisibility(View.GONE);
-        mealRequestsRecyclerView.setVisibility(View.VISIBLE);
-        filterSpinner.setVisibility(View.VISIBLE);
-        refreshUI();
-    }
+
 
     private void hideMainContent() {
         fragmentContainer.setVisibility(View.VISIBLE);
@@ -380,7 +389,9 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
     @Override
     protected void onResume() {
         super.onResume();
-        refreshUI();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            refreshUI();
+        }
     }
 
     private void checkUserTypeAndRedirectIfNeeded(String userId) {
@@ -400,6 +411,23 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
                 Log.e("MainActivity", "Error checking user type: " + databaseError.getMessage());
             }
         });
+    }
+
+    private void showMainContent() {
+        fragmentContainer.setVisibility(View.GONE);
+        mealRequestsRecyclerView.setVisibility(View.VISIBLE);
+        filterSpinner.setVisibility(View.VISIBLE);
+        userInfoTextView.setVisibility(View.VISIBLE);
+        if (isSoldier) {
+            addMealRequestButton.setVisibility(View.VISIBLE);
+        }
+        refreshUI();
+    }
+
+    public void refreshUI() {
+        loadUserInfo();
+        loadAllMealRequests();
+        updateAddButtonVisibility();
     }
 
 
