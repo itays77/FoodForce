@@ -4,6 +4,11 @@ FoodForce bridges the gap between soldiers who might be away from home or lookin
 
 
 ## **Key Features**
+### **The app features a dynamic, role-based and adaptive feed.** 
+
+### **The app leverages Firebase functionalities:**
+FoodForce utilizes Firebase's robust suite of tools to create a seamless and responsive user experience. Firebase Authentication securely manages user identities, allowing the app to distinguish between Soldiers and Mamas and provide role-specific interfaces. The Firebase Realtime Database powers the dynamic feed, ensuring instant updates of meal requests, offers, and status changes across all devices. Firebase Storage enables efficient handling of user-generated content, allowing Soldiers and Mamas to easily upload and share photos of meals, themselves, or their units, enhancing the personal connection between users. Firebase Cloud Messaging facilitates real-time notifications, ensuring users are promptly informed about new meal offers, request updates, or important messages, keeping the community engaged and responsive.
+
 ### **User Role Selection:**
 Users can choose their role as either a "Mama" (food provider) or a "Soldier" (food recipient).
 Customized Feed: The app displays different options and information based on the user's role.
