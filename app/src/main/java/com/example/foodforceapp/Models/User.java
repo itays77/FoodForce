@@ -7,7 +7,7 @@ public class User {
     private String email;
     private UserType type;
 
-    // Default constructor for Firebase
+
     public User() {}
 
     public User(String id, String name, String email, UserType type) {
@@ -17,7 +17,6 @@ public class User {
         this.type = type;
     }
 
-    // Getters and setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

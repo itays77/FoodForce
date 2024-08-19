@@ -43,14 +43,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Check if user is signed in
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            // User is signed in, navigate to main activity
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
-            // No user is signed in, show sign-in options
             createSignInIntent();
         }
     }
@@ -148,8 +145,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     private void transactToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);

@@ -29,7 +29,6 @@ public class Meal {
         this.mamaUserId = "";  // Initially empty
     }
 
-    // Getters
     public String getId() { return id; }
     public String getSoldierUserId() { return soldierUserId; }
     public String getMamaUserId() { return mamaUserId; }
@@ -47,7 +46,6 @@ public class Meal {
     public String getMamaPhotoUrl() { return mamaPhotoUrl; }
     public void setMamaPhotoUrl(String url) { this.mamaPhotoUrl = url; }
 
-    // Setters
     public void setId(String id) { this.id = id; }
     public void setSoldierUserId(String soldierUserId) { this.soldierUserId = soldierUserId; }
     public void setMamaUserId(String mamaUserId) { this.mamaUserId = mamaUserId; }

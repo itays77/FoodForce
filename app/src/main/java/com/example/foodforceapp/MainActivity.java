@@ -277,47 +277,12 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         isSoldier = false;
     }
 
-    private void updateUIWithUserInfo(User user) {
-        StringBuilder userInfo = new StringBuilder();
-        switch (user.getType()) {
-            case SOLDIER:
-                if (user instanceof Soldier) {
-                    Soldier soldier = (Soldier) user;
-                    userInfo.append(soldier.getName()).append(" - ").append(soldier.getUnit()).append("\n")
-                            .append(soldier.getSType().toString());
-                    isSoldier = true;
-                } else {
-                    userInfo.append("Error: Soldier data mismatch");
-                    isSoldier = false;
-                }
-                break;
-            case MAMA:
-                userInfo.append(user.getName()).append(" - Mama");
-                isSoldier = false;
-                break;
-            case TEMP:
-                handleIncompleteUserSetup();
-                return;
-            default:
-                userInfo.append("Unknown user type");
-                isSoldier = false;
-        }
-        userInfoTextView.setText(userInfo.toString());
-        userInfoTextView.setGravity(Gravity.START);
-        addMealRequestButton.setVisibility(isSoldier ? View.VISIBLE : View.GONE);
-    }
-
-
-
     private void handleIncompleteUserSetup() {
         Log.d("MainActivity", "User setup incomplete. Redirecting to UserTypeSelectionActivity.");
         Intent intent = new Intent(MainActivity.this, UserTypeSelectionActivity.class);
         startActivity(intent);
         finish();
     }
-
-
-
 
     private void openSoldierMealDetailFragment(String mealId) {
         SoldierMealDetailFragment detailFragment = SoldierMealDetailFragment.newInstance(mealId);
@@ -327,7 +292,6 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
                 .commit();
         showFragmentContainer();
     }
-
 
     private void openMamaMealDetailFragment(String mealId) {
         MamaMealDetailFragment detailFragment = MamaMealDetailFragment.newInstance(mealId);
@@ -356,25 +320,6 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         }
     }
 
-
-    private void hideFragmentContainer() {
-        fragmentContainer.setVisibility(View.GONE);
-        mealRequestsRecyclerView.setVisibility(View.VISIBLE);
-        filterSpinner.setVisibility(View.VISIBLE);
-        userInfoTextView.setVisibility(View.VISIBLE);
-        if (isSoldier) {
-            addMealRequestButton.setVisibility(View.VISIBLE);
-        }
-        refreshUI();
-    }
-
-
-
-    private void hideMainContent() {
-        fragmentContainer.setVisibility(View.VISIBLE);
-        mealRequestsRecyclerView.setVisibility(View.GONE);
-        filterSpinner.setVisibility(View.GONE);
-    }
     @Override
     public void onMealClick(String mealId) {
         if (isSoldier) {
@@ -429,15 +374,5 @@ public class MainActivity extends AppCompatActivity implements MealRequestAdapte
         loadAllMealRequests();
         updateAddButtonVisibility();
     }
-
-
-
-
-    public void showAddMealRequestButtonIfSoldier() {
-        if (isSoldier) {
-            addMealRequestButton.setVisibility(View.VISIBLE);
-        }
-    }
-
 
 }

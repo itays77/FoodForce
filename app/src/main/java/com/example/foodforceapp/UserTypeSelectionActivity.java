@@ -29,15 +29,7 @@ public class UserTypeSelectionActivity extends AppCompatActivity {
         mamaButton.setOnClickListener(v -> selectUserType(User.UserType.MAMA));
     }
 
-    private void showConfirmationDialog(User.UserType type) {
-        String typeString = (type == User.UserType.SOLDIER) ? "Soldier" : "Mama";
-        new AlertDialog.Builder(this)
-                .setTitle("Confirm Selection")
-                .setMessage("Are you sure you want to register as a " + typeString + "?")
-                .setPositiveButton("Yes", (dialog, which) -> selectUserType(type))
-                .setNegativeButton("No", null)
-                .show();
-    }
+
 
     private void selectUserType(User.UserType type) {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
@@ -54,11 +46,5 @@ public class UserTypeSelectionActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void navigateToProfileSetup(User.UserType type) {
-        Intent intent = new Intent(this, ProfileSetupActivity.class);
-        intent.putExtra("USER_TYPE", type);
-        intent.putExtra("USER_ID", userId);
-        startActivity(intent);
-        finish();
-    }
+
 }

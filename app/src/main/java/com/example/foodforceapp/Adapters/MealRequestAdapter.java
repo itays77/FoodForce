@@ -111,14 +111,10 @@ public class MealRequestAdapter extends RecyclerView.Adapter<MealRequestAdapter.
                     break;
             }
 
-            // Apply a light tint to the CardView background
             int tintedColor = ColorUtils.setAlphaComponent(statusColor, 25); // 10% opacity
             cardView.setCardBackgroundColor(tintedColor);
-
-            // Set the status text color to match the status
             statusTextView.setTextColor(statusColor);
 
-            // Set icons
             locationIcon.setImageResource(R.drawable.location);
             calendarIcon.setImageResource(R.drawable.calendar);
             peopleIcon.setImageResource(R.drawable.people);

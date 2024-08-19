@@ -75,10 +75,8 @@ public class LandingActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         Intent intent;
         if (currentUser != null) {
-            // User is signed in, go to MainActivity
             intent = new Intent(LandingActivity.this, MainActivity.class);
         } else {
-            // No user is signed in, go to LoginActivity
             intent = new Intent(LandingActivity.this, LoginActivity.class);
         }
         startActivity(intent);
@@ -88,10 +86,9 @@ public class LandingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            // If user is already signed in, skip the landing page
             startActivity(new Intent(LandingActivity.this, MainActivity.class));
             finish();
         }
