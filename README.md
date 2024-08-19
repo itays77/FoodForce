@@ -1,6 +1,6 @@
 # **FoodForce**
 FoodForce is an innovative application that connects hungry soldiers with mothers who have big hearts, creating a "Heroes to Heroes" network. This platform aims to provide home-cooked meals and support out soldiers any where.
-FoodForce bridges the gap between soldiers who might be away from home or looking for a home-cooked meal, and mothers who want to support these heroes by sharing their culinary skills and hospitality. The app facilitates this connection, allowing for a unique and heartwarming exchange of food and gratitude
+
 
 
 ## **Key Features**
@@ -15,17 +15,17 @@ Customized Feed: The app displays different options and information based on the
 
 
 ### **For Soldiers:**
-Unique Feed For Submit meal requests
-View their open requests
+Unique Feed For Submit meal requests,
+View their open requests,
 Track the status of their requests
 
 ### **For Mamas:**
-View all open meal requests from soldiers
-Choose and approve requests they want to fulfill
+View all open meal requests from soldiers,
+Choose and approve requests they want to fulfill,
 Manage their approved requests
 
 ### **Photo Sharing:** 
-Both Soldiers and Mamas can upload photos, allowing for:
+Both Soldiers and Mamas can upload photos
 
 ## **Technologies Used**
 
