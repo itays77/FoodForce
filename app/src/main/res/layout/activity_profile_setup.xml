@@ -11,6 +11,7 @@
         android:id="@+id/nameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#1E201E"
         android:hint="Name"
         android:inputType="textPersonName"
         android:layout_marginBottom="8dp"/>
@@ -23,12 +24,14 @@
         android:textSize="16sp"
         android:textColor="@android:color/black"
         android:background="#EEEEEE"
+        android:visibility="invisible"
         android:layout_marginBottom="8dp"/>
 
     <EditText
         android:id="@+id/locationEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#1E201E"
         android:hint="Location"
         android:layout_marginBottom="8dp"/>
 
@@ -36,8 +39,10 @@
         android:id="@+id/specialtiesCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#E6B9A6"
         android:layout_marginBottom="16dp"
         app:cardElevation="2dp"
+        android:textColor="#1E201E"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -45,12 +50,14 @@
             android:background="#E0E5B6"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:textColor="#1E201E"
             android:padding="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cooking Specialties"
+                android:textColor="#1E201E"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp"/>
 
@@ -58,11 +65,13 @@
                 android:id="@+id/specialtiesRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#1E201E"
                 android:orientation="vertical">
 
                 <RadioButton
                     android:id="@+id/radioHomeMeal"
                     android:layout_width="wrap_content"
+                    android:textColor="#1E201E"
                     android:layout_height="wrap_content"
                     android:text="Home Meal"/>
 
@@ -70,12 +79,14 @@
                     android:id="@+id/radioItalian"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#1E201E"
                     android:text="Italian"/>
 
                 <RadioButton
                     android:id="@+id/radioOther"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#1E201E"
                     android:text="Other"/>
 
             </RadioGroup>
@@ -87,6 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:textColor="#1E201E"
         app:cardElevation="2dp"
         app:cardCornerRadius="8dp">
 
@@ -95,6 +107,7 @@
             android:background="#E0E5B6"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:textColor="#1E201E"
             android:padding="16dp">
 
             <TextView
@@ -102,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:text="Unit"
                 android:textStyle="bold"
+                android:textColor="#1E201E"
                 android:layout_marginBottom="8dp"/>
 
             <RadioGroup
@@ -159,6 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:textColor="#1E201E"
         app:cardElevation="2dp"
         app:cardCornerRadius="8dp">
 
@@ -166,6 +181,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="#E0E5B6"
             android:padding="16dp">
 
             <TextView
@@ -173,11 +189,13 @@
                 android:layout_height="wrap_content"
                 android:text="Soldier Type"
                 android:textStyle="bold"
+                android:background="#E0E5B6"
                 android:layout_marginBottom="8dp"/>
 
             <RadioGroup
                 android:id="@+id/soldierTypeRadioGroup"
                 android:layout_width="match_parent"
+                android:background="#E0E5B6"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
